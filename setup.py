@@ -1,7 +1,7 @@
 from setuptools import setup, find_packages
 import sys, os
 
-version = '0.3.1'
+version = '0.4'
 
 setup(name='LetterCounter',
       version=version,
@@ -13,7 +13,7 @@ setup(name='LetterCounter',
       author='Nick Murdoch',
       author_email='nick@nivan.net',
       url='http://nivan.net/nickmurdoch',
-      license='GPL',
+      license='MIT',
       packages=find_packages(exclude=['ez_setup', 'examples', 'tests']),
       include_package_data=True,
       zip_safe=False,

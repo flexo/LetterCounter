@@ -1,0 +1,80 @@
+===========================
+LetterCounter Python module
+===========================
+
+:Author: Nick Murdoch
+:Copyright: 2010 Nick Murdoch
+:Licence: MIT
+
+Fun with letters.
+
+This file can be used with the python doctest module to verify everything works as it should.
+
+Classes
+=======
+
+LetterIterator
+--------------
+
+An Iterator that counts from A → Z, AA → AZ, BA → ... → ZZ, AAA → ...
+
+It supports start value, end value, step, and any alphabet.
+
+::
+
+    >>> from lettercounter import LetterIterator
+    >>> li = LetterIterator()
+    >>> li.next(), li.next(), li.next()
+    ('A', 'B', 'C')
+    >>> for l in LetterIterator('A', 'BA'):
+    ...     print l,
+    ...
+    A B C D E F G H I J K L M N O P Q R S T U V W X Y Z AA AB AC AD AE AF AG AH AI AJ AK AL AM AN AO AP AQ AR AS AT AU AV AW AX AY AZ BA
+    >>> for l in LetterIterator('AA', 'BA', 2):
+    ...     print l,
+    ...
+    AA AC AE AG AI AK AM AO AQ AS AU AW AY BA
+    >>> for l in LetterIterator('aaa', 'ccc', letters='abc'):
+    ...     print l,
+    ...
+    aaa aab aac aba abb abc aca acb acc baa bab bac bba bbb bbc bca bcb bcc caa cab cac cba cbb cbc cca ccb ccc
+
+LetterCounter
+-------------
+
+Most numbers written in bases higher than 10 use letters to represent numbers higher than ten. The most common such case is hexadecimal, which uses the digits [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, A, B, C, D, E, F].
+
+Bases of up to 36 (0-9 and 26 letters) can be represented like this, but I wanted a system that counted upwards from A, not 0.
+
+Here are a couple of lines of examples on how this class can be used. Note that 'A' is equivalent to zero, not one.
+
+::
+
+    >>> from lettercounter import LetterCounter
+    >>> lc = LetterCounter()
+    >>> lc
+    LetterCounter("")
+    >>> print lc
+    <BLANKLINE>
+    >>> lc = LetterCounter('FJEIO')
+    >>> print lc
+    FJEIO
+    >>> int(lc)
+    2445990
+    >>> lc2 = LetterCounter(LetterCounter.from_int(20))
+    >>> lc2
+    LetterCounter("U")
+    >>> result = lc + lc2
+    >>> result
+    LetterCounter("FJEJI")
+    >>> result / 4
+    LetterCounter("BIUPI")
+    >>> int(LetterCounter(LetterCounter.from_int(0)))
+    0
+    >>> print LetterCounter('AAAAF')
+    AAAAF
+    >>> print LetterCounter('AAAAF').unpad()
+    F
+    >>> print LetterCounter('FOO').pad(5)
+    AAFOO
+

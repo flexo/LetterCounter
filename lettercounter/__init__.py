@@ -1,25 +1,32 @@
-""" LetterCounter: Represent Base 26 as letters of the alphabet
+"""LetterCounter: Represent Base 26 as letters of the alphabet
 
-    Copyright (c) Nick Murdoch, 2006, 2007
+Released under the MIT license:
 
-    This program is free software: you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation, either version 3 of the License, or
-    (at your option) any later version.
+Copyright (c) Nick Murdoch, 2006, 2007, 2010
 
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
 
-    You should have received a copy of the GNU General Public License
-    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+The above copyright notice and this permission notice shall be included in
+all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+THE SOFTWARE.
 """
+
 import string
 
 class LetterIterator(object):
-    """ Iterates over letters A -> Z, AA -> AZ, BA -> BZ, etc.
-    """
+    """Iterates over letters A -> Z, AA -> AZ, BA -> BZ, etc."""
     def __init__(self, start='A', end=None, step=1, letters=string.uppercase):
         self.started = False
         self.current = start
@@ -71,9 +78,10 @@ class LetterIterator(object):
     
 
     def __cmp__(self, other):
-        """ Compare to another LetterIterator and return which is higher
-            according to LetterIterator logic.
-            The two LetterIterators must use the same letters string.
+        """Compare to another LetterIterator and return which is higher
+        according to LetterIterator logic.
+        
+        The two LetterIterators must use the same letters string.
         """
         assert self.letters == other.letters
         if len(self.current) > len(other.current):
@@ -82,9 +90,11 @@ class LetterIterator(object):
             return -1
         else:
             for pos in range(len(self.current)):
-                if self.letters.index(self.current[pos]) > other.letters.index(other.current[pos]):
+                index_self = self.letters.index(self.current[pos])
+                index_other = other.letters.index(other.current[pos])
+                if index_self > index_other:
                     return 1
-                elif self.letters.index(self.current[pos]) < other.letters.index(other.current[pos]):
+                elif index_self < index_other:
                     return -1
                 else:
                     continue
@@ -93,11 +103,11 @@ class LetterIterator(object):
 
 
 class LetterCounter(object):
-    """ Letter Counter: Represent positive integers as letters
-        A=0, B, C, ... Z, BA, BB, BC, ... 
+    """Letter Counter: Represent positive integers as letters
+    A=0, B, C, ... Z, BA, BB, BC, ... 
         
-        A is used as a 0, so AAAAAB is the same as B. For more
-        common usage, use LetterIterator
+    A is used as a 0, so AAAAAB is the same as B. For more common usage,
+    use LetterIterator.
     """
 
     letters = string.uppercase
@@ -144,22 +154,22 @@ class LetterCounter(object):
 
 
     def __add__(self, other):
-        return LetterCounter(self.fromInt(int(self) + int(other)))
+        return LetterCounter(self.from_int(int(self) + int(other)))
     
     def __sub__(self, other):
-        return LetterCounter(self.fromInt(int(self) - int(other)))
+        return LetterCounter(self.from_int(int(self) - int(other)))
     
     def __mul__(self, other):
-        return LetterCounter(self.fromInt(int(self) * int(other)))
+        return LetterCounter(self.from_int(int(self) * int(other)))
     
     def __div__(self, other):
-        return LetterCounter(self.fromInt(int(self) / int(other)))
+        return LetterCounter(self.from_int(int(self) / int(other)))
     
     def __mod__(self, other):
-        return LetterCounter(self.fromInt(int(self) % int(other)))
+        return LetterCounter(self.from_int(int(self) % int(other)))
     
     def __pow__(self, other):
-        return LetterCounter(self.fromInt(pow(int(self), int(other))))
+        return LetterCounter(self.from_int(pow(int(self), int(other))))
     
     def __int__(self):
         ret = 0
@@ -170,7 +180,11 @@ class LetterCounter(object):
             ret += ( ord(self.value[pos]) - ord('A') ) * self.base**v
         return int(ret) # don't return Long if possible
 
-    def fromInt(cls, value):
+    def from_int(cls, value):
+        """Returns a string representing the integer provided.
+
+        The string can be used to create a new LetterCounter or LetterIterator.
+        """
         if value < 0:
             raise ValueError("value must be >= 0")
         i = 7
@@ -183,8 +197,8 @@ class LetterCounter(object):
             value = value - d*(cls.base**i)
             i -= 1
         return s
-    fromInt = classmethod(fromInt)
-    
+    from_int = classmethod(from_int)
+    fromInt = from_int # backwards compat.
 
     def pad(self, padding):
         v = self.value
@@ -197,3 +211,4 @@ class LetterCounter(object):
         while v.startswith('A'):
             v = v[1:]
         return v
+
