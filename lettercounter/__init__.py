@@ -44,7 +44,7 @@ class LetterIterator(object):
             if c == self.letters[-1]:
                 return self.letters[0]
             return self.letters[self.letters.index(c)+1]
-        except ValueError, e:
+        except ValueError as e:
             raise ValueError(str(e) + ": %c is not in %s" % (c, self.letters))
 
     def _next(self):
@@ -66,15 +66,16 @@ class LetterIterator(object):
                 self.current = self.letters[0] + self.current
         return self.current
 
-    def next(self):
+    def __next__(self):
         # First iteration should return first number regardless of step
         if not self.started:
             self.started = True
             return self.current
 
         for i in range(self.step):
-            next = self._next()
-        return next
+            next_ = self._next()
+        return next_
+    next = __next__
     
 
     def __cmp__(self, other):
@@ -138,11 +139,12 @@ class LetterCounter(object):
             return 1
     
     
-    def __nonzero__(self):
+    def __bool__(self):
         for c in self.value:
             if c != 'A':
                 return True
         return False
+    __nonzero__ = __bool__
     
     def __setattr__(self, name, value):
         if name == "value":
@@ -173,9 +175,7 @@ class LetterCounter(object):
     
     def __int__(self):
         ret = 0
-        r = range(len(self.value))
-        r.reverse()
-        for v in r:
+        for v in reversed(range(len(self.value)))
             pos = len(self.value) - 1 - v
             ret += ( ord(self.value[pos]) - ord('A') ) * self.base**v
         return int(ret) # don't return Long if possible
