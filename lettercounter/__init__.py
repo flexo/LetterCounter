@@ -23,11 +23,11 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 """
 
-import string
+ASCII_UPPERCASE = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
 
 class LetterIterator(object):
     """Iterates over letters A -> Z, AA -> AZ, BA -> BZ, etc."""
-    def __init__(self, start='A', end=None, step=1, letters=string.uppercase):
+    def __init__(self, start='A', end=None, step=1, letters=ASCII_UPPERCASE):
         self.started = False
         self.current = start
         self.end = None
@@ -111,7 +111,7 @@ class LetterCounter(object):
     use LetterIterator.
     """
 
-    letters = string.uppercase
+    letters = ASCII_UPPERCASE
     base = 26
 
     def __init__(self, initial=""):
@@ -175,7 +175,7 @@ class LetterCounter(object):
     
     def __int__(self):
         ret = 0
-        for v in reversed(range(len(self.value)))
+        for v in reversed(range(len(self.value))):
             pos = len(self.value) - 1 - v
             ret += ( ord(self.value[pos]) - ord('A') ) * self.base**v
         return int(ret) # don't return Long if possible
@@ -190,7 +190,7 @@ class LetterCounter(object):
         i = 7
         s = ""
         while i >= 0:
-            d = value/(cls.base**i)
+            d = value//(cls.base**i)
             if d > 25:
                 raise ValueError("value must be <= 208827064575")
             s += cls.letters[d]
